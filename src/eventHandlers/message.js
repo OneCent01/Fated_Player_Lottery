@@ -50,23 +50,71 @@ ADMIN WIDGET COMMANDS
 
 !runLottery
 !stopLottery
-!play
+!showLottery
+!hideLottery
+!flashLottery
+!play / !join
 !unplay
 */
 
 const handleAdminMessage = (message, sessionData) => {
   const words = message.trim().split(' ');
 
-  switch(words[0]) {
-    case('!runLottery'):
+  switch(words[0].toLowerCase()) {
+    case('!runlottery'):
       handleRunLottery(sessionData, message);
       break;
-    case('!stopLottery'):
+    case('!stoplottery'):
       handleStopLottery(sessionData);
+      break;
+    case('!showlottery'):
+      handleShowLottery(sessionData);
+      break;
+    case('!hidelottery'):
+      handleHideLottery(sessionData);
+      break;
+    case('!flashlottery'):
+      handleFlashLottery(sessionData);
       break;
     default:
       break;
   }
+};
+
+const handleHideLottery = (sessionData) => {
+  if(sessionData.lottery.isOpen) {
+    return;
+  }
+  const lotteryResultsContainer = document.getElementById('lottery_results');
+  const runningLotteryContainer = document.getElementById('running_lottery');
+
+  sessionData.lottery.timer.container.style.opacity = '0';
+  lotteryResultsContainer.style.opacity = '0';
+  runningLotteryContainer.style.opacity = '1';
+  runningLotteryContainer.style.display = 'block';
+};
+
+const handleShowLottery = (sessionData) => {
+  if(sessionData.lottery.isOpen) {
+    return;
+  }
+  const lotteryResultsContainer = document.getElementById('lottery_results');
+  const runningLotteryContainer = document.getElementById('running_lottery');
+
+  sessionData.lottery.timer.container.style.opacity = '1';
+  lotteryResultsContainer.style.opacity = '1';
+  runningLotteryContainer.style.opacity = '0';
+  runningLotteryContainer.style.display = 'block';
+};
+
+const handleFlashLottery = (sessionData) => {
+  if(sessionData.lottery.isOpen) {
+    return;
+  }
+  handleShowLottery(sessionData)
+  setTimeout(() => {
+    handleHideLottery(sessionData)
+  }, 10000)
 };
 
 const handleStopLottery = (sessionData) => {
@@ -79,7 +127,7 @@ const handleRunLottery = (sessionData, message) => {
   const [firstWord, secondWord, thirdWord] = message.trim().split(' ');
   const secondWordNumber = Number(secondWord);
   const thirdWordNumber = Number(thirdWord);
-  console.log('firstWord, secondWord, thirdWord: ', firstWord, secondWord, thirdWord)
+
   let numberOfPlayers = (
     secondWordNumber && !isNaN(secondWordNumber) ? 
     secondWordNumber : 

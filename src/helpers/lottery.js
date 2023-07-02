@@ -13,7 +13,6 @@ const timerPromise = (sessionData, seconds) => new Promise((resolve) => {
 let hideTimeout = null;
 
 export const runLottery = async (sessionData, numberOfPlayers, seconds) => new Promise(async (resolve) => {
-	console.log('sessionData: ', sessionData)
 	const runningLotteryContainer = document.getElementById('running_lottery');
 	const lotteryResultsContainer = document.getElementById('lottery_results');
 	const lotterResultsList = document.getElementById('lottery_winners_container');
